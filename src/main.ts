@@ -23,7 +23,13 @@ function executeTests() {
 
 
 function main() {
-    executeTests();
+    if (argv.t) {
+        executeTests();
+    } else if (argv.s) {
+        executeFile(argv.s);
+    } else {
+        GLOB.WARN_NO_OPTIONS();
+    }
 }
 
 main();

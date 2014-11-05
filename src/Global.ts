@@ -19,11 +19,15 @@ var GLOB = {
     MISSING_R_PAREN_TOKEN: (ar?) => GLOB.ERROR("Missing l_parem token", ar),
     MISSING_QUOTE_TOKEN: (ar?) => GLOB.ERROR("Missing quote token", ar),
 
+    WARN_NO_OPTIONS: (ar?) => GLOB.WARN("Please provide an option\n-t -> to execute tests\n-s filename -> to execute filename", ar),
+    
+    
     ERROR_PARSING_PROGRAM: (ar?) => GLOB.ERROR("Missing while parsing Program", ar),
     ERROR_PARSING_EXPRESSION: (ar?) => GLOB.ERROR("Error while parsing Expression", ar),
     ERROR_PARSING_ASSIGNMENT: (ar?) => GLOB.ERROR("Error while parsing Assignment", ar),
     ERROR_EXPECTED_ALPHANUMERIC: (ar?) => GLOB.ERROR("Expected alphanumeric value", ar),
-
+    
+    
     TEST : [
         "../test/math/math.3l",
         "../test/object/object.3l",
@@ -37,10 +41,16 @@ var GLOB = {
         if (GLOB.VERBOSE) {
             console.log("Info : " + str);
             if (ar)
-                console.error(ar);
+                console.log(ar);
         }
     },
 
+    WARN: function (str, ar) {
+        console.warn("Warning : " + str);
+        if (ar)
+            console.warn(ar);
+    },
+    
     ERROR: function (str, ar) {
         if (GLOB.SHOW_ERROR) {
             console.error("Error : " + str);
