@@ -1,4 +1,4 @@
-﻿var GLOB = {
+var GLOB = {
 
     VERBOSE: false,
     SHOW_ERROR: true,
@@ -24,6 +24,14 @@
     ERROR_PARSING_ASSIGNMENT: (ar?) => GLOB.ERROR("Error while parsing Assignment", ar),
     ERROR_EXPECTED_ALPHANUMERIC: (ar?) => GLOB.ERROR("Expected alphanumeric value", ar),
 
+    TEST : [
+        "../test/math/math.3l",
+        "../test/object/object.3l",
+        "../test/object/function.3l",
+        "../test/recursion/factorial.3l",
+        "../test/recursion/fibonacci.3l",
+        "../test/require/require.3l"
+    ],
 
     INFO: function (str, ar) {
         if (GLOB.VERBOSE) {

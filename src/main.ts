@@ -1,27 +1,29 @@
-﻿function main() {
-    var tests = [
-        "test/math/math.3l",
-        "test/object/object.3l",
-        "test/object/function.3l",
-        "test/recursion/factorial.3l",
-        "test/recursion/fibonacci.3l",
-        "test/require/require.3l"
-    ];
+var argv = require("optimist").argv;
 
-    tests.forEach(function (test) {
+function executeFile(file) {
+    var interp = Interpreting.Interpreter.FromFile(file);
+    interp.Init();
+    interp.Run();
+}
+
+function executeTests() {
+    GLOB.TEST.forEach(function (test) {
         var ind = test.lastIndexOf('/');
         var name = test.substring(ind + 1);
 
         console.log("Executing test: " + name);
-
-        var interp = Interpreting.Interpreter.FromFile(test);
-        interp.Init();
+            
         var time = Date.now();
-        interp.Run();
+        executeFile(__dirname + '/' + test);
         time = Date.now() - time;
 
         console.log("Test " + name + " executed in " + time + " ms\n");
-    });
+    });   
+}
+
+
+function main() {
+    executeTests();
 }
 
 main();

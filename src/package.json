@@ -1,0 +1,7 @@
+{
+    "name": "TS-SPL",
+    "main": "main.js",
+    "dependencies" : {
+        "optimist":"*"
+    }
+}
