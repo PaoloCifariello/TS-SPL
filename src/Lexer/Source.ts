@@ -1,4 +1,4 @@
-﻿module Lexing {
+module Lexing {
     export class Source {
 
         private source_code: string;

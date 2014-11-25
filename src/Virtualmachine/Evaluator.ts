@@ -1,4 +1,4 @@
-﻿module Runtime {
+module Runtime {
     export class Evaluator {
         private vm: VirtualMachine;
 
@@ -152,8 +152,8 @@
             }
         }
 
-        public static ToInt(value: string): number {
-            return parseInt(value);
+        public static ToNumber(value: string): number {
+            return parseFloat(value);
         }
 
         public static ToBool(value: string): boolean {

@@ -1,4 +1,4 @@
-﻿module Parsing {
+module Parsing {
     export class Parser {
         private tokens: Lexing.Token[];
 
@@ -302,8 +302,8 @@
                     //else
                     exp1 = new Expression(ExpressionType.IDENTIFIER, id);
                 // Integer case
-            } else if ((this.CurrentType == Lexing.TokenType.INTEGER) ||
-                ((this.NextType == Lexing.TokenType.INTEGER) &&
+            } else if ((this.CurrentType == Lexing.TokenType.NUMBER) ||
+                ((this.NextType == Lexing.TokenType.NUMBER) &&
                 ((this.CurrentType == Lexing.TokenType.PLUS) ||
                 (this.CurrentType == Lexing.TokenType.MINUS)))) {
 
@@ -319,7 +319,7 @@
 
                 var value: Runtime.ExpressionValue = new Runtime.ExpressionValue(
                     Runtime.ExpressionValueType.NUMBER,
-                    sign * Runtime.Evaluator.ToInt(cur.Value)
+                    sign * Runtime.Evaluator.ToNumber(cur.Value)
                     );
 
                 exp1 = new Expression(ExpressionType.INTEGER, value);

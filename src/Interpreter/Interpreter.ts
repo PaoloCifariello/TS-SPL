@@ -1,4 +1,4 @@
-﻿module Interpreting
+module Interpreting
 {
 	export class Interpreter
 	{
@@ -7,7 +7,8 @@
         private vm: Runtime.VirtualMachine;
         private program: Parsing.Program ;
 
-        public constructor(param1, directory? : string) {
+        public constructor(param1, directory? : string)
+        {
             this.parser = new Parsing.Parser();
             this.vm = new Runtime.VirtualMachine(directory ? directory : '/');
 
@@ -26,26 +27,28 @@
         }
 
         public static FromFile(path: string): Interpreter 
-		{
+        {
             var dirPath = path.substr(0, path.lastIndexOf('/'));
             return new Interpreter(Lexing.Lexer.FromFile(path), dirPath);
-		}
+        }
 
         public Init()
-		{
+        {
             this.lexer.Tokenize();
             this.program = this.parser.Parse(this.lexer.Tokens);
 
             if (this.program == null) {
                 GLOB.ERROR_PARSING_PROGRAM();
             }
-		}
+        }
 
-        public Run() {
+        public Run() 
+        {
             this.vm.Execute(this.program);
         }
 
-        public RunAsModule(): Runtime.ExpressionValue {
+        public RunAsModule(): Runtime.ExpressionValue
+        {
             this.vm.Environment.Modify("exports", new Runtime.ExpressionValue(Runtime.ExpressionValueType.OBJECT));
             this.vm.Execute(this.program);
             return <Runtime.ExpressionValue> this.vm.Environment.Get("exports");

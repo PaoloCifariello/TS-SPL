@@ -1,4 +1,4 @@
-﻿module Lexing {
+module Lexing {
 
     export class Token {
 
@@ -116,7 +116,7 @@
 
         OBJECT_ACCESS,              // 4
 
-        INTEGER,              // 5
+        NUMBER,              // 5
         DOUBLE,              // 6
         ALPHANUMERIC,              // 7
         STRING,              // 8

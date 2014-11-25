@@ -1,4 +1,4 @@
-﻿module Lexing {
+module Lexing {
 
     export class Lexer {
         private source: Source;
@@ -115,7 +115,8 @@
             }
         }
 
-        public Tokenize() {
+        public Tokenize()
+        {
             // Gets tokens for each line.
 
             for (var i = 0; i < this.source.LineCount; i++) {

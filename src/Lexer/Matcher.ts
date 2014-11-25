@@ -1,4 +1,4 @@
-﻿module Lexing {
+module Lexing {
     export class Matcher {
         private KeywordMatcher: MatchKey[];
         private SpecialMatcher: MatchKey[];
@@ -87,12 +87,12 @@
 
                 if (idx == -1)
                     return new Token(
-                        TokenType.INTEGER,
+                        TokenType.NUMBER,
                         line.substring(0)
                         );
                 else
                     return new Token(
-                        TokenType.INTEGER,
+                        TokenType.NUMBER,
                         line.substring(0, idx)
                         );
             }
@@ -137,8 +137,10 @@
 
         public static ParseInteger(line: string): number {
             for (var position = 1; position < line.length; position++)
-                if (!Matcher.isNumber(line[position]))
-                    return position;
+                if (!Matcher.isNumber(line[position])) {
+                    if(line[position] !== ".")
+                        return position;
+                }
 
             return -1;
         }
