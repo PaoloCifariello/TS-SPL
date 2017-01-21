@@ -1,0 +1,27 @@
+{
+  "name": "TS-SPL",
+  "version": "1.0.0",
+  "description": "TS-SPL ======",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaoloCifariello/TS-SPL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaoloCifariello/TS-SPL/issues"
+  },
+  "homepage": "https://github.com/PaoloCifariello/TS-SPL#readme",
+  "devDependencies": {
+    "@types/node": "^7.0.0",
+    "typescript": "^2.1.5"
+  }
+}

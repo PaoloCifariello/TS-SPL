@@ -1,4 +1,7 @@
-﻿module Parsing {
+﻿
+    import {Statements} from "./Statements";
+    import {Expression} from "./Expression";
+
     export class Function_ {
         private Name: string;
         private Parameters: string[];
@@ -22,4 +25,3 @@
             this.innerStatements = inner;
         }
     }
-}

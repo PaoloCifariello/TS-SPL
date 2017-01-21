@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="lib\node\node.d.ts" />
-    <TypeScriptCompile Include="src\Global.ts" />
+    <TypeScriptCompile Include="src\global.ts" />
     <TypeScriptCompile Include="src\Lexer\Lexer.ts" />
     <TypeScriptCompile Include="src\Lexer\Matcher.ts" />
     <TypeScriptCompile Include="src\Lexer\Source.ts" />

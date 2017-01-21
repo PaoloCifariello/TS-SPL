@@ -1,35 +1,53 @@
-var argv = require("optimist").argv;
+import {Interpreter} from "./Interpreter/Interpreter";
+import {glob} from "./global";
+
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+//var argv = require("optimist").argv;
 
 function executeFile(file) {
-    var interp = Interpreting.Interpreter.FromFile(file);
+    var interp = Interpreter.FromFile(file);
     interp.Init();
     interp.Run();
 }
 
 function executeTests() {
-    GLOB.TEST.forEach(function (test) {
+    glob.TEST.forEach(function (test) {
         var ind = test.lastIndexOf('/');
         var name = test.substring(ind + 1);
 
         console.log("Executing test: " + name);
-            
+
         var time = Date.now();
         executeFile(__dirname + '/' + test);
         time = Date.now() - time;
 
         console.log("Test " + name + " executed in " + time + " ms\n");
-    });   
+    });
 }
 
 
 function main() {
-    if (argv.t) {
-        executeTests();
-    } else if (argv.s) {
-        executeFile(argv.s);
-    } else {
-        GLOB.WARN_NO_OPTIONS();
-    }
+    //if (argv.t) {
+    //    executeTests();
+    //} else if (argv.s) {
+    //    executeFile(argv.s);
+    //} else {
+    //    glob.WARN_NO_OPTIONS();
+    //}
+
+    var interp :Interpreter = new Interpreter();
+
+    rl.on('line', (input) => {
+        interp.getNextInput(input);
+        interp.Init ();
+        interp.Run ();
+    });
 }
 
 main();
