@@ -1,5 +1,7 @@
 import {Interpreter} from "./Interpreter/Interpreter";
 import {glob} from "./global";
+//import * as argv from "minimist";
+//process.argv.slice(2));
 
 const readline = require('readline');
 
