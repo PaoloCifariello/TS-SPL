@@ -1,8 +1,7 @@
 import {Interpreter} from "./Interpreter/Interpreter";
 import {glob} from "./global";
-//import * as argv from "minimist";
-//process.argv.slice(2));
 
+const argv = require('minimist')(process.argv.slice(2));
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -26,7 +25,7 @@ function executeTests() {
         console.log("Executing test: " + name);
 
         var time = Date.now();
-        executeFile(__dirname + '/' + test);
+        executeFile(test);
         time = Date.now() - time;
 
         console.log("Test " + name + " executed in " + time + " ms\n");
@@ -35,21 +34,19 @@ function executeTests() {
 
 
 function main() {
-    //if (argv.t) {
-    //    executeTests();
-    //} else if (argv.s) {
-    //    executeFile(argv.s);
-    //} else {
-    //    glob.WARN_NO_OPTIONS();
-    //}
+    if (argv._.length > 0) {
+        executeFile(argv._[0]);
+    } else if (argv.t) {
+        executeTests();
+    } else {
+        var interp :Interpreter = new Interpreter();
 
-    var interp :Interpreter = new Interpreter();
-
-    rl.on('line', (input) => {
-        interp.getNextInput(input);
-        interp.Init ();
-        interp.Run ();
-    });
+        rl.on('line', (input) => {
+            interp.getNextInput(input);
+            interp.Init ();
+            interp.Run ();
+        });
+    }
 }
 
 main();

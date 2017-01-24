@@ -13,14 +13,13 @@ export class Interpreter
     private program: Program ;
 
 
-    public constructor(param1?, directory? : string)
-    {
+    public constructor(param1?, directory? : string) {
         this.parser = new Parser();
         this.vm = new VirtualMachine(directory ? directory : '/');
 
         if (!param1) {
-            this.parser = new Parser ();
-            this.vm = new VirtualMachine ();
+            this.parser = new Parser();
+            this.vm = new VirtualMachine();
 
         } else {
             switch (param1.constructor) {

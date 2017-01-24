@@ -1,7 +1,7 @@
 export enum TokenType {
     SLASH,                      // / 0
 
-    INLINE_COMMENT = 1,				// // 1
+    INLINE_COMMENT,				// // 1
     MULTILINE_COMMENT_START,	// /* 2
     MULTILINE_COMMENT_END,		// */ 3
 

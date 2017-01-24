@@ -20,5 +20,6 @@ Math.pow = function(a,n) {
 	return res;
 };
 
+print("5 to the 12th");
 var b = Math.pow(5,12);
 print("Result: " + b);

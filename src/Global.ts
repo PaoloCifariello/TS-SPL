@@ -29,12 +29,12 @@ export class glob {
 
 
     public static TEST = [
-        "../test/math/math.3l",
-        "../test/object/object.3l",
-        "../test/object/function.3l",
-        "../test/recursion/factorial.3l",
-        "../test/recursion/fibonacci.3l",
-        "../test/require/require.3l"
+        __dirname + "/../test/math/math.3l",
+        __dirname + "/../test/object/object.3l",
+        __dirname + "/../test/object/function.3l",
+        __dirname + "/../test/recursion/factorial.3l",
+        __dirname + "/../test/recursion/fibonacci.3l",
+        __dirname + "/../test/require/require.3l"
     ];
 
     public static INFO(str, ar) {

@@ -8,5 +8,5 @@ gulp.task('default', function () {
             noImplicitAny: false,
             target: 'es6'
         }))
-        .pipe(gulp.dest('./build/ts'));
+        .pipe(gulp.dest('./build/'));
 });
