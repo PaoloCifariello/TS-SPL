@@ -9,110 +9,104 @@ export class Lexer {
     private matcher: Matcher = new Matcher();
     private lastToken: Token;
 
-    private CurrentLine: string;
+    private currentLine: string;
 
     public get Tokens(): Token[] {
         return this.tokens;
     }
 
-    constructor(src) {
-        switch (typeof (src)) {
-            case "string":
-                {
-                    this.source = new Source(src);
-                    break;
-                }
-            case "object":
-                {
-                    this.source = src;
-                    break;
-                }
-        }
+    constructor(src: Source) {
+        this.source = src;
     }
 
-    public static FromFile(path: string): Lexer {
-        var src = Source.FromFile(path);
-        return new Lexer(src);
+    public static fromFile(path: string): Lexer {
+        var source = Source.FromFile(path);
+        return new Lexer(source);
     }
 
-    private GetNextToken(): Token {
-        var CurrentToken = this.matcher.Match(this.CurrentLine);
+    public static fromSource(src: string): Lexer {
+        let source = new Source(src);
+        return new Lexer(source);
+    }
 
-        if (!CurrentToken)
+    private getNextToken(): Token {
+        let currentToken = this.matcher.Match(this.currentLine);
+
+        if (!currentToken)
             return null;
 
-        var length = CurrentToken.Length;
-        this.CurrentLine = this.CurrentLine.substring(length);
+        let length = currentToken.Length;
+        this.currentLine = this.currentLine.substring(length);
 
-        return CurrentToken;
+        return currentToken;
     }
 
-    private AddNextToken(): boolean {
-        this.SkipEmptyChar();
+    private addNextToken(): boolean {
+        this.skipEmptyChar();
 
-        if (this.CurrentLine.length === 0)
+        if (this.currentLine.length === 0)
             return false;
 
-        var CurrentToken = this.GetNextToken();
+        let currentToken = this.getNextToken();
 
-        if (!CurrentToken) {
+        if (!currentToken) {
             return false;
         } else if (this.lastToken != null && this.lastToken.Type == TokenType.MULTILINE_COMMENT_START) {
-            if (CurrentToken.Type == TokenType.MULTILINE_COMMENT_END)
+            if (currentToken.Type == TokenType.MULTILINE_COMMENT_END)
                 this.lastToken = null;
 
             return true;
             // In case of Inline comment, just skip current line at lexing time
-        } else if (CurrentToken.Type == TokenType.INLINE_COMMENT) {
+        } else if (currentToken.Type == TokenType.INLINE_COMMENT) {
             return false;
             // In case of multiline comment /* , iterate until you find */
-        } else if (CurrentToken.Type == TokenType.MULTILINE_COMMENT_START) {
-            this.lastToken = CurrentToken;
+        } else if (currentToken.Type == TokenType.MULTILINE_COMMENT_START) {
+            this.lastToken = currentToken;
             return true;
         }
 
-        this.tokens.push(CurrentToken);
+        this.tokens.push(currentToken);
 
         // string case
-        if (CurrentToken.Type == TokenType.QUOTE) {
-            var value = this.ParseString();
+        if (currentToken.Type == TokenType.QUOTE) {
+            let value = this.parseString();
             if (value == null)
                 return false;
 
             this.tokens.push(new Token(TokenType.ALPHANUMERIC, value));
-            this.tokens.push(CurrentToken);
+            this.tokens.push(currentToken);
         }
 
-        this.lastToken = CurrentToken;
+        this.lastToken = currentToken;
         return true;
     }
 
-    private ParseString(): string {
-        var ind = this.CurrentLine.indexOf('"');
+    private parseString(): string {
+        var ind = this.currentLine.indexOf('"');
         if (ind == -1)
             return null;
 
-        var val = this.CurrentLine.substring(0, ind);
-        this.CurrentLine = this.CurrentLine.substring(ind);
+        let val = this.currentLine.substring(0, ind);
+        this.currentLine = this.currentLine.substring(ind);
 
         // Looking for second quote
-        if (this.CurrentLine[0] != '"')
+        if (this.currentLine[0] != '"')
             return null;
 
-        this.CurrentLine = this.CurrentLine.substring(1);
+        this.currentLine = this.currentLine.substring(1);
         return val;
     }
 
-    private SkipEmptyChar() {
+    private skipEmptyChar() {
         var position = 0;
 
-        while (position < this.CurrentLine.length) {
-            var c = this.CurrentLine[position];
+        while (position < this.currentLine.length) {
+            var c = this.currentLine[position];
 
             if (c == ' ' || c == '\t' || c == '\r')
                 position++;
             else {
-                this.CurrentLine = this.CurrentLine.substring(position);
+                this.currentLine = this.currentLine.substring(position);
                 break;
             }
         }
@@ -121,11 +115,10 @@ export class Lexer {
     public Tokenize()
     {
         // Gets tokens for each line.
-
         for (var i = 0; i < this.source.LineCount; i++) {
-            this.CurrentLine = this.source.getLine();
+            this.currentLine = this.source.getLine();
 
-            while (this.AddNextToken());
+            while (this.addNextToken());
         }
     }
 

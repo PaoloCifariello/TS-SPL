@@ -25,7 +25,7 @@ export class Interpreter
             switch (param1.constructor) {
                 case String:
                 {
-                    this.lexer = new Lexer(param1);
+                    this.lexer = Lexer.fromSource(param1);
                     break;
                 }
                 case Lexer:
@@ -38,13 +38,13 @@ export class Interpreter
     }
 
     public getNextInput(scode: string) {
-        this.lexer = new Lexer (scode);
+        this.lexer = Lexer.fromSource(scode);
     }
 
     public static FromFile(path: string): Interpreter
     {
         var dirPath = path.substr(0, path.lastIndexOf('/'));
-        return new Interpreter(Lexer.FromFile(path), dirPath);
+        return new Interpreter(Lexer.fromFile(path), dirPath);
     }
 
     public Init()

@@ -4,6 +4,6 @@
 
 node_modules/
 
-build/ts
+build/
 src/**/*.js
 src/node_modules

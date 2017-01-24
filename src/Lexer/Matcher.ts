@@ -66,93 +66,118 @@ export class Matcher {
         ];
     }
 
-    public Match(line: string): Token {
+    private matchKeyword(line: string): Token {
         // Try to match Keywords
         for (var i = 0; i < this.KeywordMatcher.length; i++) {
+
             if (this.KeywordMatcher[i].Match(line)) {
-
                 return new Token(this.KeywordMatcher[i].Type, null);
-            }
-        }
-
-        // Try to match Special Keywords
-        for (var i = 0; i < this.SpecialMatcher.length; i++) {
-            if (this.SpecialMatcher[i].Match(line)) {
-
-                return new Token(this.SpecialMatcher[i].Type);
-            }
-        }
-
-        // Try to match Integer
-        if (line[0] >= '0' && line[0] <= '9') {
-            var idx = Matcher.ParseInteger(line);
-
-            if (idx == -1)
-                return new Token(
-                    TokenType.NUMBER,
-                    line.substring(0)
-                    );
-            else
-                return new Token(
-                    TokenType.NUMBER,
-                    line.substring(0, idx)
-                    );
-        }
-
-        // Try to match alphanumeric
-        if (Matcher.isAlphanumeric(line[0])) {
-            var idx = Matcher.ParseAlphanumeric(line);
-            if (idx == -1)
-                return new Token(
-                    TokenType.ALPHANUMERIC,
-                    line.substring(0)
-                    );
-            else {
-                if (line[idx] != '.') {
-                    return new Token(
-                        TokenType.ALPHANUMERIC,
-                        line.substr(0, idx)
-                        );
-                } else {
-                    var AssignKey: string[] = [];
-                    var idx_aux = idx;
-
-                    AssignKey.push(line.substring(0, idx_aux));
-
-                    while (line[idx_aux] == '.') {
-                        idx_aux = idx_aux + 1 + Matcher.ParseAlphanumeric(line.substring(idx_aux + 1));
-
-                        AssignKey.push(line.substring(idx + 1, idx_aux));
-                        idx = idx_aux;
-                    }
-
-                    return new Token(
-                        TokenType.OBJECT_ACCESS,
-                        AssignKey
-                        );
-                }
             }
         }
 
         return null;
     }
 
-    public static ParseInteger(line: string): number {
-        for (var position = 1; position < line.length; position++)
-            if (!Matcher.isNumber(line[position])) {
-                if(line[position] !== ".")
-                    return position;
-            }
+    private  matchSpecial(line: string): Token {
+        // Try to match Special Keywords
+        for (var i = 0; i < this.SpecialMatcher.length; i++) {
 
-        return -1;
+            if (this.SpecialMatcher[i].Match(line)) {
+                return new Token(this.SpecialMatcher[i].Type);
+            }
+        }
+
+        return null;
     }
 
-    public static ParseAlphanumeric(line: string): number {
-        for (var position = 1; position < line.length; position++)
-            if (!Matcher.isAlphanumeric(line[position]))
-                return position;
 
-        return -1;
+    /**
+     * Matches a Token in the source code
+     *
+     * @param line source code where Matcher looks for tokens
+     * @returns {Token} the token found, or null
+     * @constructor
+     */
+    public Match(line: string): Token {
+        let nextToken;
+
+
+        if ((nextToken = this.matchKeyword(line)) != null)
+            return nextToken;
+
+        if ((nextToken = this.matchSpecial(line)) != null)
+            return nextToken;
+
+        // Try to match Integer
+        if (line[0] >= '0' && line[0] <= '9') {
+            var idx = Matcher.ParseInteger(line);
+            return new Token(TokenType.NUMBER, line.substring(0, idx));
+        }
+
+        /* Try to match alphanumeric */
+        if (Matcher.isAlphanumeric(line[0])) {
+            let idx = Matcher.ParseAlphanumeric(line);
+
+            if (line[idx] != '.') {
+                return new Token(TokenType.ALPHANUMERIC, line.substring(0, idx));
+            } else { /* matches object accessors, in the form myObject.myProperty.val */
+                var AssignKey: string[] = [];
+                var idx_aux = idx;
+
+                AssignKey.push(line.substring(0, idx_aux));
+
+                while (line[idx_aux] == '.') {
+                    idx_aux = idx_aux + 1 + Matcher.ParseAlphanumeric(line.substring(idx_aux + 1));
+
+                    AssignKey.push(line.substring(idx + 1, idx_aux));
+                    idx = idx_aux;
+                }
+
+                return new Token(TokenType.OBJECT_ACCESS, AssignKey);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Matches a number starting from line[0]
+     *
+     * @param line current line of source code
+     * @returns {number} position where the number ends
+     */
+    public static ParseInteger(line: string): number {
+        let foundDecimalPart = false;
+
+        for (var position = 1; position < line.length; position++) {
+            let c = line[position];
+            if (Matcher.isNumber(c))
+                continue;
+
+            if (c === "." && !foundDecimalPart)
+                foundDecimalPart = true;
+            else
+                return position;
+            }
+
+        return position;
+    }
+
+    /**
+     * Matches an alphanumeric starting from line[0]
+     *
+     * @param line
+     * @returns {number}
+     * @constructor
+     */
+    public static ParseAlphanumeric(line: string): number {
+        for (var position = 1; position < line.length; position++) {
+            let c = line[position];
+            if (!Matcher.isAlphanumeric(c))
+                break;
+        }
+
+        return position;
     }
 
     private static isNumber(c: string): boolean {
@@ -195,6 +220,13 @@ class MatchKey
         this.word = word;
     }
 
+    /**
+     * Matches current string starting from line[0] with the
+     *
+     * @param line
+     * @returns {boolean}
+     * @constructor
+     */
     public Match(line: string): boolean {
         var substr: string;
 
